@@ -1,5 +1,5 @@
 const express = require('express');
-const {auth} = require('express-openid-connect');
+const ticketRoutes = require('./src/routes/ticketRoutes');
 
 require('dotenv').config();
 
@@ -8,32 +8,71 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const config = {
-    authRequired: false,
-    auth0Logout: true,
-    secret: process.env.AUTH0_SECRET,
-    baseURL: process.env.BASE_URL,
-    clientID: process.env.AUTH0_CLIENT_ID,
-    issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+})
 
-}
+app.use('/api/tickets', ticketRoutes);
+
+const { auth, requiresAuth  } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.AUTH0_SECRET,
+  baseURL: 'http://localhost:3000',
+  clientID: process.env.AUTH0_CLIENT_ID,
+  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
+};
 
 app.use(auth(config));
 
-app.get('/', (req, res) => {
-    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-  });
+app.get('/', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM tickets');
+    const totalTickets = result.rows[0].count;
 
-app.listen(PORT, () => {
-    console.log(`server is running on http://localhost:${PORT}`);
+    const totalTicketsMessage = `Ukupan broj generiranih ulaznica: ${totalTickets}`;
+    const authMessage = req.oidc.isAuthenticated() ? 'logged in' : 'logged out';
+    
+    const loginButton = !req.oidc.isAuthenticated() 
+    ? '<a href="/login"><button>login</button></a>'
+    : '<a href="/logout"><button>logout</button></a>';
+
+    const generateTicketButton = req.oidc.isAuthenticated() 
+    ? '<a href="/api/tickets/generate"><button>generate a ticket</button></a>'
+    : '<p></p>';
+
+  
+    res.send(`
+      <html>
+        <body>
+          <h1>${totalTicketsMessage}</h1>
+          <p>Status: ${authMessage}</p>
+          ${loginButton}
+          ${generateTicketButton}
+        </body>
+      </html>
+    `);
+
+
+  } catch (error) {
+    console.error('Eeror fetching ticket count:', error);
+    res.status(500).send('error fetching the total number of tickets.');
+  }
+});
+app.listen(process.env.PORT || 3000, () =>
+{
+    console.log(`server running on port ${process.env.PORT || 3000}`);
 });
 
-/*
 
-app.use('api/tickets', ticketRoutes);
+const { requiresAuth } = require('express-openid-connect');
 
-app.listen(PORT, () => {
-    console.log(`server is running on http://localhost:${PORT}`);
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
 });
-
-*/
