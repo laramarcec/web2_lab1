@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles/ticketInfo.css">
+  <title>ticket info</title>
+</head>
+<body>
+    <div class="container">
+        <h1>TICKET DETAILS</h1>
+        <p class="ticketInfoLabel">VATIN</p> <p> <%= ticket.vatin %></p>
+        <p class="ticketInfoLabel">FIRST NAME</p> <p> <%= ticket.first_name %> </p>
+        <p class="ticketInfoLabel">LAST NAME</p>  <p> <%= ticket.last_name %>  </p>
+        <p class="ticketInfoLabel">GENERATED</p>  <p> <%= createdAtFormatted %> </p>
+        <a href="/">go back to main page</a>
+    </div>
+</body>
+</html>
