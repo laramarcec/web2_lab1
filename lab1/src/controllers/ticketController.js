@@ -4,8 +4,6 @@ const axios = require('axios');
 
 require('dotenv').config();
 
-const getAccessToken = require('../auth.js');
-
 const pool = new Pool(
 {
   connectionString: process.env.DATABASE_URL,
@@ -74,7 +72,11 @@ const getTicketInfo = async (req, res) =>
       second: '2-digit',
     });
 
-    res.render('ticketInfo', {ticket, createdAtFormatted});
+    const isAuthenticated = req.oidc.isAuthenticated();
+
+    const userEmail = isAuthenticated ? req.oidc.user.email : null;
+
+    res.render('ticketInfo', {ticket, createdAtFormatted, userEmail});
 
   } 
   catch (error)

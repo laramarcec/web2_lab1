@@ -7,6 +7,7 @@
   <title>ticket info</title>
 </head>
 <body>
+    
     <div class="container">
         <h1>TICKET DETAILS</h1>
         <p class="ticketInfoLabel">VATIN</p> <p> <%= ticket.vatin %></p>
@@ -15,5 +16,6 @@
         <p class="ticketInfoLabel">GENERATED</p>  <p> <%= createdAtFormatted %> </p>
         <a href="/">go back to main page</a>
     </div>
+    <p class = "status">you are logged in with email <i><%= userEmail %></i></p>
 </body>
 </html>
