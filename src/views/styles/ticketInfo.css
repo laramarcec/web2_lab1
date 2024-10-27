@@ -97,3 +97,6 @@ button {
 button:hover {
     background-color: rgb(121, 69, 143);
 }
+.loginbtn:hover {
+    border:none;
+}
