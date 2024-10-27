@@ -35,7 +35,7 @@ const generateTicket = async (req, res) =>
     );
     
     const ticketId = ticket.rows[0].id;
-    const qrCodeDataURL = await qrcode.toDataURL(`http://localhost:3000/api/ticket/${ticketId}`);
+    const qrCodeDataURL = await qrcode.toDataURL(`https://web2ticketgenerator.onrender.com/api/ticket/${ticketId}`);
 
     res.render('ticketGenerated', {qrCodeDataURL});
 
@@ -76,7 +76,9 @@ const getTicketInfo = async (req, res) =>
 
     const userEmail = isAuthenticated ? req.oidc.user.email : null;
 
-    res.render('ticketInfo', {ticket, createdAtFormatted, userEmail});
+    const loginButton = !req.oidc.isAuthenticated() ? '<a href="/login"><button>login</button></a>' : '<a href="/logout"><button>logout</button></a>';
+
+    res.render('ticketInfo', {ticket, createdAtFormatted, userEmail, loginButton});
 
   } 
   catch (error)

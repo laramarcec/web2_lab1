@@ -37,8 +37,6 @@ const validateAccessToken = (req, res, next) =>
             return res.sendStatus(403); 
         }
 
-        console.log(process.env.AUTH0_ISSUER_BASE_URL);
-
         const signingKey = key.getPublicKey();
 
         jwt.verify

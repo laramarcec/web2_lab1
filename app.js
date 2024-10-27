@@ -57,8 +57,6 @@ app.get('/', async (req, res) =>
 
     const totalTicketsMessage = `total number of generated tickets: ${totalTickets}`;
     
-    const loginButton = !req.oidc.isAuthenticated() ? '<a href="/login"><button>login</button></a>' : '<a href="/logout"><button>logout</button></a>';
-
     const generateTicketForm = 
     `
       <form id="ticketForm">
