@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": { 
-    "build": "npm run clean; tsc; npm run copy-views;",
-    "clean": "rm -rf dist", 
-    "copy-views": "cp -r public dist/public/", 
-    "start": "node app.js" 
+  "scripts": {
+    "build": "npm run clean && tsc && npm run copy-views",
+    "clean": "rimraf dist",
+    "copy-views": "xcopy public dist\\public /E /I",
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,8 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "jwks-rsa": "^3.1.0",
     "pg": "^8.13.0",
-    "pug": "^3.0.3",
     "qrcode": "^1.5.4",
+    "rimraf": "^6.0.1",
     "sequelize": "^6.37.4"
   }
 }
