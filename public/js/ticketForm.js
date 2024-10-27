@@ -27,7 +27,6 @@ async function generateTicket()
     try 
     {
         const accessToken = await fetchAccessToken();
-        console.log(accessToken);
 
         const response = await fetch('/api/ticket/generate',
         {
