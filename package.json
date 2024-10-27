@@ -3,12 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": {
-    "build": "npm run clean && tsc && npm run copy-views",
-    "clean": "npx rimraf dist",
-    "copy-views": "xcopy public dist\\public /E /I",
-    "start": "node app.js"
-  },
+"scripts": { 
+  "build": "",
+  "start": "node app.js" 
+},
   "author": "",
   "license": "ISC",
   "dependencies": {
