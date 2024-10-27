@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": { 
-    "build": "npm run clean; tsc; npm run copy-views; npm run copy-views", 
+    "build": "npm run clean; tsc; npm run copy-views;",
+    "clean": "rm -rf dist", 
+    "copy-views": "cp -r public dist/public/", 
     "start": "node app.js" 
   },
   "author": "",
