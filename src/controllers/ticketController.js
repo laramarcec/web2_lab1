@@ -77,7 +77,7 @@ const getTicketInfo = async (req, res) =>
 
     console.log(req.oidc.user);
 
-    const userName = isAuthenticated ? req.oidc.user.name : null;
+    const userName = isAuthenticated ? req.oidc.user.user_name : null;
 
     const loginButton = !req.oidc.isAuthenticated() ? '<a class = "loginbtn" href="/login"><button>login</button></a>' : '<a class = "loginbtn href="/logout"><button>logout</button></a>';
 
