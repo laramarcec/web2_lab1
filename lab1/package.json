@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "scripts": { 
+    "build": "npm run clean; tsc; npm run copy-views; npm run copy-views", 
+    "clean": "rm -rf dist", 
+    "copy-views": "cp -r src/views/ dist/views/", 
+    "start": "node dist/08-webapp.js" 
   },
   "author": "",
   "license": "ISC",

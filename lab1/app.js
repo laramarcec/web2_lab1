@@ -11,7 +11,8 @@ const ticketRoutes = require('./src/routes/ticketRoutes');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const externalUrl = process.env.RENDER_EXTERNAL_URL;
+const port = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 4080; 
 
 app.use(express.json());
 app.use('/js', express.static(path.join(__dirname, 'public/js')));
@@ -37,7 +38,7 @@ const config =
   authRequired: false,
   auth0Logout: true,
   secret: process.env.AUTH0_SECRET,
-  baseURL: 'http://localhost:3000',
+  baseURL: externalUrl || `https://localhost:${port}`,
   clientID: process.env.AUTH0_CLIENT_ID,
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
 };
@@ -86,12 +87,21 @@ app.get('/', async (req, res) =>
 });
 
 
-app.listen(process.env.PORT || 3000, () =>
-{
-  console.log(`server running on port ${process.env.PORT || 3000}`);
-});
-
-
+if (externalUrl) {   
+  const hostname = '0.0.0.0'; 
+  app.listen(port, hostname, () => {     
+    console.log(`Server locally running at http://${hostname}:${port}/ and from outside on ${externalUrl}`);   
+  });
+} 
+else { 
+  https.createServer({ 
+    key: fs.readFileSync('server.key'), 
+    cert: fs.readFileSync('server.cert') 
+  }, app) 
+  .listen(port, function () {
+    console.log(`Server running at https://localhost:${port}/`);
+  }); 
+} 
 
 app.get('/profile', requiresAuth(), (req, res) => {
   res.send(JSON.stringify(req.oidc.user));
